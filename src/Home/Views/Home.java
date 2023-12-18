@@ -1,5 +1,7 @@
 package Home.Views;
 
+import Components.panelItems;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
@@ -7,6 +9,11 @@ import javax.swing.JFileChooser;
 public class Home extends javax.swing.JFrame {
     public Home() {
         initComponents();
+        scrollPacel.setLayout(new GridLayout(10/5, 8));
+        for (int i = 0; i < 10; i++) {
+            panelItems items = new panelItems();
+            scrollPacel.add(items);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -41,6 +48,8 @@ public class Home extends javax.swing.JFrame {
         btnChooseImage = new javax.swing.JButton();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPacel = new javax.swing.JPanel();
         searchScreen = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -215,6 +224,7 @@ public class Home extends javax.swing.JFrame {
         });
         homeScreen.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 530, 120, -1));
 
+        jDateChooser1.setBackground(null);
         jDateChooser1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
         homeScreen.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 190, 30));
 
@@ -222,6 +232,21 @@ public class Home extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
         jLabel3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
         homeScreen.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, 190, 10));
+
+        javax.swing.GroupLayout scrollPacelLayout = new javax.swing.GroupLayout(scrollPacel);
+        scrollPacel.setLayout(scrollPacelLayout);
+        scrollPacelLayout.setHorizontalGroup(
+            scrollPacelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 808, Short.MAX_VALUE)
+        );
+        scrollPacelLayout.setVerticalGroup(
+            scrollPacelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 288, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(scrollPacel);
+
+        homeScreen.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 800, 290));
 
         mainScreen.add(homeScreen, "card2");
 
@@ -332,6 +357,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChooseImageActionPerformed
 
     public static void main(String args[]) {
+        new Themes.Theme("light");
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Home().setVisible(true);
@@ -361,12 +387,14 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbImage;
     private javax.swing.JPanel mainScreen;
     private javax.swing.JPanel menuScreen;
     private javax.swing.JLabel profile;
+    private javax.swing.JPanel scrollPacel;
     private javax.swing.JPanel searchScreen;
     private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtContact;
