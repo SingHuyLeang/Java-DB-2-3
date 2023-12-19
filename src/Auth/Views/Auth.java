@@ -10,7 +10,7 @@ import java.sql.*;
 
 public class Auth extends javax.swing.JFrame {
     
-    private void addAuthScreen(Component screen){
+    private void addAuthScreen(Component screen) {
         authScreen.removeAll();
         authScreen.add(screen);
         authScreen.repaint();
@@ -20,6 +20,7 @@ public class Auth extends javax.swing.JFrame {
     public Auth() {
         initComponents();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -36,9 +37,9 @@ public class Auth extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtSignInEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtSignInPassword = new javax.swing.JTextField();
         btnSignIn = new com.k33ptoo.components.KButton();
         gotoSignUp = new javax.swing.JLabel();
         signUpScreen = new javax.swing.JPanel();
@@ -115,10 +116,10 @@ public class Auth extends javax.swing.JFrame {
         jLabel3.setAutoscrolls(true);
         jLabel3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
 
-        jTextField3.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(45, 44, 44));
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        jTextField3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
+        txtSignInEmail.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtSignInEmail.setForeground(new java.awt.Color(45, 44, 44));
+        txtSignInEmail.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtSignInEmail.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
 
         jLabel7.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(45, 45, 45));
@@ -127,10 +128,10 @@ public class Auth extends javax.swing.JFrame {
         jLabel7.setAutoscrolls(true);
         jLabel7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
 
-        jTextField4.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(45, 44, 44));
-        jTextField4.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        jTextField4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
+        txtSignInPassword.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtSignInPassword.setForeground(new java.awt.Color(45, 44, 44));
+        txtSignInPassword.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtSignInPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(45, 45, 45)));
 
         btnSignIn.setText("Sign In");
         btnSignIn.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
@@ -181,11 +182,11 @@ public class Auth extends javax.swing.JFrame {
                             .addGroup(signInScreenLayout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtSignInEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(signInScreenLayout.createSequentialGroup()
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtSignInPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(signInScreenLayout.createSequentialGroup()
                         .addGap(166, 166, 166)
                         .addComponent(btnSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -206,11 +207,11 @@ public class Auth extends javax.swing.JFrame {
                 .addGap(85, 85, 85)
                 .addGroup(signInScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSignInEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(signInScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSignInPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addComponent(btnSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68)
@@ -383,7 +384,34 @@ public class Auth extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
-        
+        String email = txtSignInEmail.getText();
+        String password = txtSignInPassword.getText();
+        if (!email.isEmpty() && !password.isEmpty()) {
+            try {
+                String sql = "SELECT `id` FROM `authantication` WHERE `email` = ? AND `password` = MD5(?)";
+                DBConnector connector = new DBConnector();
+                PreparedStatement ps;
+                ResultSet rs;
+                
+                ps = connector.connector("db_employee").prepareStatement(sql);
+                ps.setString(1, email);
+                ps.setString(2, password);
+                
+                rs = ps.executeQuery();
+                
+                if (rs.next()) {
+                    new Home().setVisible(true);
+                    dispose();
+                } else {
+                    AlertMessager.error("Your account can't be find");
+                }
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+        } else {
+        }
     }//GEN-LAST:event_btnSignInActionPerformed
 
     private void gotoSignUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gotoSignUpMouseClicked
@@ -395,14 +423,15 @@ public class Auth extends javax.swing.JFrame {
         String email = txtEmail.getText();
         String password = txtPassword.getText();
         String rePassword = txtRePassword.getText();
-
+        
         if (!email.isEmpty() || !password.isEmpty() || !rePassword.isEmpty()) {
             if (password.equals(rePassword)) {
                 DBConnector connector = new DBConnector();
-
+                
                 PreparedStatement ps;
                 ResultSet rs;
-
+                
+                
                 try {
                     String sql = "SELECT `email` FROM `authantication` WHERE email=?";
                     ps = (PreparedStatement) connector.connector("db_employee").prepareStatement(sql);
@@ -410,7 +439,7 @@ public class Auth extends javax.swing.JFrame {
                     rs = ps.executeQuery();
                     if (rs.next()) {
                         AlertMessager.error("Your email is used");
-                    }else{
+                    } else {
                         String sql1 = "INSERT INTO `authantication`(`email`, `password`) VALUES (?,MD5(?))";
                         ps = (PreparedStatement) connector.connector("db_employee").prepareStatement(sql1);
                         ps.setString(1, email);
@@ -427,10 +456,10 @@ public class Auth extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-            }else{
+            } else {
                 AlertMessager.warning("Your Re-Password is not correct");
             }
-        }else{
+        } else {
             AlertMessager.warning("Please enter your data");
         }
     }//GEN-LAST:event_btnSignUpActionPerformed
@@ -440,7 +469,7 @@ public class Auth extends javax.swing.JFrame {
         addAuthScreen(signInScreen);
 
     }//GEN-LAST:event_gotoSignInMouseClicked
-
+    
     public static void main(String args[]) {
         new Theme("light");
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -473,12 +502,12 @@ public class Auth extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JPanel signInScreen;
     private javax.swing.JPanel signUpScreen;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtRePassword;
+    private javax.swing.JTextField txtSignInEmail;
+    private javax.swing.JTextField txtSignInPassword;
     // End of variables declaration//GEN-END:variables
 }
