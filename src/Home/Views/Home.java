@@ -1,16 +1,23 @@
 package Home.Views;
 
+import Components.AlertMessager;
 import Components.panelItems;
+import Home.Controller.EmployeeController;
+import Home.Model.EmployeeModel;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 public class Home extends javax.swing.JFrame {
+    
+    EmployeeController controller = new EmployeeController();
+    
     public Home() {
         initComponents();
-        scrollPacel.setLayout(new GridLayout(10/5, 8));
-        for (int i = 0; i < 10; i++) {
+        scrollPacel.setLayout(new GridLayout(20/5, 5, 3, 3));
+        for (int i = 0; i < 20; i++) {
             panelItems items = new panelItems();
             scrollPacel.add(items);
         }
@@ -20,6 +27,7 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGpGender = new javax.swing.ButtonGroup();
         dashBoard = new javax.swing.JPanel();
         profile = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -37,7 +45,7 @@ public class Home extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         txtSalary = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        txtContact = new javax.swing.JTextField();
+        txtImage = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -46,10 +54,11 @@ public class Home extends javax.swing.JFrame {
         btnAddEmployee = new javax.swing.JButton();
         lbImage = new javax.swing.JLabel();
         btnChooseImage = new javax.swing.JButton();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         scrollPacel = new javax.swing.JPanel();
+        txtContact = new javax.swing.JTextField();
         searchScreen = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -139,6 +148,7 @@ public class Home extends javax.swing.JFrame {
         jLabel10.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
         homeScreen.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 100, 30));
 
+        btnGpGender.add(btnMale);
         btnMale.setText("Male");
         btnMale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +157,7 @@ public class Home extends javax.swing.JFrame {
         });
         homeScreen.add(btnMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 411, 90, 30));
 
+        btnGpGender.add(btnFemale);
         btnFemale.setText("Female");
         btnFemale.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,10 +183,11 @@ public class Home extends javax.swing.JFrame {
         jLabel12.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
         homeScreen.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 100, 30));
 
-        txtContact.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        txtContact.setForeground(new java.awt.Color(51, 51, 51));
-        txtContact.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
-        homeScreen.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 190, 30));
+        txtImage.setEditable(false);
+        txtImage.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtImage.setForeground(new java.awt.Color(51, 51, 51));
+        txtImage.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        homeScreen.add(txtImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 550, 0, 0));
 
         jLabel7.setBackground(new java.awt.Color(100, 100, 100));
         jLabel7.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
@@ -208,7 +220,12 @@ public class Home extends javax.swing.JFrame {
         btnAddEmployee.setBackground(new java.awt.Color(255, 204, 204));
         btnAddEmployee.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
         btnAddEmployee.setText("+ Add");
-        homeScreen.add(btnAddEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 520, 140, -1));
+        btnAddEmployee.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddEmployeeActionPerformed(evt);
+            }
+        });
+        homeScreen.add(btnAddEmployee, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 530, 140, -1));
 
         lbImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbImage.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(100, 100, 100)));
@@ -224,9 +241,8 @@ public class Home extends javax.swing.JFrame {
         });
         homeScreen.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 530, 120, -1));
 
-        jDateChooser1.setBackground(null);
-        jDateChooser1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
-        homeScreen.add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 190, 30));
+        txtDate.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        homeScreen.add(txtDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 190, 30));
 
         jLabel3.setBackground(new java.awt.Color(100, 100, 100));
         jLabel3.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
@@ -247,6 +263,11 @@ public class Home extends javax.swing.JFrame {
         jScrollPane1.setViewportView(scrollPacel);
 
         homeScreen.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 800, 290));
+
+        txtContact.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtContact.setForeground(new java.awt.Color(51, 51, 51));
+        txtContact.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        homeScreen.add(txtContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 190, 30));
 
         mainScreen.add(homeScreen, "card2");
 
@@ -354,7 +375,38 @@ public class Home extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon(fileName);
         Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
         lbImage.setIcon(new ImageIcon(image));
+        txtImage.setText(fileName);
     }//GEN-LAST:event_btnChooseImageActionPerformed
+
+    private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
+        String name = txtName.getText();
+        String gender = btnMale.isSelected()?"Male":btnFemale.isSelected()?"Female":"Other";
+        String age1 = txtAge.getText();
+        String position = txtPosition.getText();
+        String salary1 = txtSalary.getText();
+        String contact = txtContact.getText();
+        String image   = txtImage.getText();
+        SimpleDateFormat df = new SimpleDateFormat(txtDate.getDateFormatString());
+        String date = df.format(txtDate.getDate());
+        
+        System.out.println("name      : "+name);
+        System.out.println("gender    : "+gender);
+        System.out.println("age       : "+age1);
+        System.out.println("position  : "+position);
+        System.out.println("salary    : "+salary1);
+        System.out.println("contact   : "+contact);
+        System.out.println("image     : "+image);
+        System.out.println("date      : "+date);
+        
+        if (!name.isEmpty() && !gender.isEmpty() && !age1.isEmpty() && !position.isEmpty() && !salary1.isEmpty() && !contact.isEmpty() && !image.isEmpty() && !date.isEmpty()) {
+            int age = Integer.parseInt(age1);
+            double salary = Double.parseDouble(salary1);
+            controller.addEmpToDB(new EmployeeModel(name,gender,age,position,salary,contact,image,date));
+        } else {
+            AlertMessager.warning("Please enter all field");
+        }
+        
+    }//GEN-LAST:event_btnAddEmployeeActionPerformed
 
     public static void main(String args[]) {
         new Themes.Theme("light");
@@ -369,6 +421,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnAddEmployee;
     private javax.swing.JButton btnChooseImage;
     private javax.swing.JRadioButton btnFemale;
+    private javax.swing.ButtonGroup btnGpGender;
     private javax.swing.JRadioButton btnMale;
     private javax.swing.JButton btnSearch;
     private com.k33ptoo.components.KButton btnSignUp;
@@ -376,7 +429,6 @@ public class Home extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btnSignUp2;
     private javax.swing.JPanel dashBoard;
     private javax.swing.JPanel homeScreen;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -398,6 +450,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel searchScreen;
     private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtContact;
+    private com.toedter.calendar.JDateChooser txtDate;
+    private javax.swing.JTextField txtImage;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPosition;
     private javax.swing.JTextField txtSalary;
