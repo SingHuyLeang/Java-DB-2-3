@@ -4,10 +4,36 @@ import Components.AlertMessager;
 import Database.DBConnector;
 import Home.Model.EmployeeModel;
 import java.sql.*;
+import java.util.*;
 
 public class EmployeeController extends DBConnector{
     PreparedStatement ps;
     ResultSet rs;
+    
+    public Collection<EmployeeModel> getData(){
+        List<EmployeeModel> list = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM `tbl_employee`";
+            ps = connector("db_employee").prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                EmployeeModel emp = new EmployeeModel(
+                        rs.getString("name"),
+                        rs.getString("gender"),
+                        rs.getInt("age"),
+                        rs.getString("position"),
+                        rs.getDouble("salary"),
+                        rs.getString("contact"),
+                        rs.getString("image"),
+                        rs.getString("date")
+                );
+                list.add(emp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
     
     public void addEmpToDB(EmployeeModel employee){
         try {

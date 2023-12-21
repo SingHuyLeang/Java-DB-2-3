@@ -7,6 +7,9 @@ import Home.Model.EmployeeModel;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -16,11 +19,30 @@ public class Home extends javax.swing.JFrame {
     
     public Home() {
         initComponents();
-        scrollPacel.setLayout(new GridLayout(20/5, 5, 3, 3));
-        for (int i = 0; i < 20; i++) {
-            panelItems items = new panelItems();
-            scrollPacel.add(items);
-        }
+        viewEmployee();
+    }
+    
+    public void viewEmployee(){
+        scrollPanel.removeAll();
+        scrollPanel.setLayout(new GridLayout(controller.getData().size()/5, 5));
+        controller.getData().forEach((emp) -> {
+            panelItems items = new panelItems(emp);
+            scrollPanel.add(items);
+            scrollPanel.repaint();
+            scrollPanel.revalidate();
+        });        
+    }
+    
+    public void clear(){
+        txtName.setText("");
+        btnMale.setSelected(false);
+        btnFemale.setSelected(false);
+        txtSalary.setText("");
+        txtAge.setText("");
+        txtContact.setText("");
+        txtPosition.setText("");
+        txtImage.setText("");
+        lbImage.setIcon(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -57,7 +79,7 @@ public class Home extends javax.swing.JFrame {
         txtDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        scrollPacel = new javax.swing.JPanel();
+        scrollPanel = new javax.swing.JPanel();
         txtContact = new javax.swing.JTextField();
         searchScreen = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -150,20 +172,10 @@ public class Home extends javax.swing.JFrame {
 
         btnGpGender.add(btnMale);
         btnMale.setText("Male");
-        btnMale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMaleActionPerformed(evt);
-            }
-        });
         homeScreen.add(btnMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 411, 90, 30));
 
         btnGpGender.add(btnFemale);
         btnFemale.setText("Female");
-        btnFemale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFemaleActionPerformed(evt);
-            }
-        });
         homeScreen.add(btnFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(201, 410, 100, 30));
 
         jLabel11.setBackground(new java.awt.Color(100, 100, 100));
@@ -249,18 +261,18 @@ public class Home extends javax.swing.JFrame {
         jLabel3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
         homeScreen.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, 190, 10));
 
-        javax.swing.GroupLayout scrollPacelLayout = new javax.swing.GroupLayout(scrollPacel);
-        scrollPacel.setLayout(scrollPacelLayout);
-        scrollPacelLayout.setHorizontalGroup(
-            scrollPacelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout scrollPanelLayout = new javax.swing.GroupLayout(scrollPanel);
+        scrollPanel.setLayout(scrollPanelLayout);
+        scrollPanelLayout.setHorizontalGroup(
+            scrollPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 808, Short.MAX_VALUE)
         );
-        scrollPacelLayout.setVerticalGroup(
-            scrollPacelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        scrollPanelLayout.setVerticalGroup(
+            scrollPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 288, Short.MAX_VALUE)
         );
 
-        jScrollPane1.setViewportView(scrollPacel);
+        jScrollPane1.setViewportView(scrollPanel);
 
         homeScreen.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 800, 290));
 
@@ -359,14 +371,6 @@ public class Home extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMaleActionPerformed
-
-    private void btnFemaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFemaleActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFemaleActionPerformed
-
     private void btnChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseImageActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(this);
@@ -402,6 +406,8 @@ public class Home extends javax.swing.JFrame {
             int age = Integer.parseInt(age1);
             double salary = Double.parseDouble(salary1);
             controller.addEmpToDB(new EmployeeModel(name,gender,age,position,salary,contact,image,date));
+            viewEmployee();
+            clear();
         } else {
             AlertMessager.warning("Please enter all field");
         }
@@ -446,7 +452,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel mainScreen;
     private javax.swing.JPanel menuScreen;
     private javax.swing.JLabel profile;
-    private javax.swing.JPanel scrollPacel;
+    private javax.swing.JPanel scrollPanel;
     private javax.swing.JPanel searchScreen;
     private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtContact;
