@@ -4,15 +4,20 @@ import Components.AlertMessager;
 import Components.panelItems;
 import Home.Controller.EmployeeController;
 import Home.Model.EmployeeModel;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 public class Home extends javax.swing.JFrame {
     
     EmployeeController controller = new EmployeeController();
@@ -30,7 +35,27 @@ public class Home extends javax.swing.JFrame {
             scrollPanel.add(items);
             scrollPanel.repaint();
             scrollPanel.revalidate();
+     
         });        
+    }
+    
+    public void getData(){
+        DefaultTableModel model =(DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        controller.getData().forEach((emp)->{
+            Object[] row = {
+                emp.getId(),
+                emp.getName(),
+                emp.getGender(),
+                emp.getAge(),
+                emp.getPosition(),
+                emp.getSalary(),
+                emp.getContact(),
+                emp.getImage(),
+                emp.getDate(),
+            };
+            model.addRow(row);
+        });
     }
     
     public void clear(){
@@ -42,7 +67,26 @@ public class Home extends javax.swing.JFrame {
         txtContact.setText("");
         txtPosition.setText("");
         txtImage.setText("");
+        btnGpGender.clearSelection();
         lbImage.setIcon(null);
+    }
+    
+    void gotoScreen(Component component){
+        mainScreen.removeAll();
+        mainScreen.add(component);
+        mainScreen.repaint();
+        mainScreen.revalidate();
+    }
+    
+    public void chooseImage(JLabel label,JTextField textField){
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(this);
+        File file = chooser.getSelectedFile();
+        String fileName  = file.getAbsolutePath();
+        ImageIcon icon = new ImageIcon(fileName);
+        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(image));
+        textField.setText(fileName);
     }
 
     @SuppressWarnings("unchecked")
@@ -53,9 +97,9 @@ public class Home extends javax.swing.JFrame {
         dashBoard = new javax.swing.JPanel();
         profile = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        btnSignUp = new com.k33ptoo.components.KButton();
-        btnSignUp1 = new com.k33ptoo.components.KButton();
-        btnSignUp2 = new com.k33ptoo.components.KButton();
+        btnHome = new com.k33ptoo.components.KButton();
+        btnGotoSearch = new com.k33ptoo.components.KButton();
+        btnMenu1 = new com.k33ptoo.components.KButton();
         mainScreen = new javax.swing.JPanel();
         homeScreen = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -83,9 +127,31 @@ public class Home extends javax.swing.JFrame {
         txtContact = new javax.swing.JTextField();
         searchScreen = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
+        txtUDAge = new javax.swing.JTextField();
+        txtUDImage = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        btnUDMale = new javax.swing.JRadioButton();
+        btnUDFemale = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        txtUDPosition = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        txtUDDate = new com.toedter.calendar.JDateChooser();
+        txtUDSalary = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        txtUDContact = new javax.swing.JTextField();
+        lbUDImage = new javax.swing.JLabel();
+        btnUDChooseImage = new javax.swing.JButton();
+        btnMenu = new com.k33ptoo.components.KButton();
+        btnMenu2 = new com.k33ptoo.components.KButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtUDName = new javax.swing.JTextField();
+        txtUDId = new javax.swing.JTextField();
         menuScreen = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -103,41 +169,56 @@ public class Home extends javax.swing.JFrame {
         jLabel1.setText("Admin");
         dashBoard.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 166, 170, 30));
 
-        btnSignUp.setText("Menu");
-        btnSignUp.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnSignUp.setkBorderRadius(30);
-        btnSignUp.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnSignUp.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnSignUp.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnSignUp.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnSignUp.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp.setkStartColor(new java.awt.Color(255, 153, 153));
-        dashBoard.add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 150, -1));
+        btnHome.setText("Home");
+        btnHome.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnHome.setkBorderRadius(30);
+        btnHome.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnHome.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnHome.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnHome.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnHome.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnHome.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnHome.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
+        dashBoard.add(btnHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 150, -1));
 
-        btnSignUp1.setText("Home");
-        btnSignUp1.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnSignUp1.setkBorderRadius(30);
-        btnSignUp1.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnSignUp1.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnSignUp1.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnSignUp1.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnSignUp1.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp1.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp1.setkStartColor(new java.awt.Color(255, 153, 153));
-        dashBoard.add(btnSignUp1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 150, -1));
+        btnGotoSearch.setText("Search");
+        btnGotoSearch.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnGotoSearch.setkBorderRadius(30);
+        btnGotoSearch.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnGotoSearch.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnGotoSearch.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnGotoSearch.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnGotoSearch.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnGotoSearch.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnGotoSearch.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnGotoSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGotoSearchActionPerformed(evt);
+            }
+        });
+        dashBoard.add(btnGotoSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, -1));
 
-        btnSignUp2.setText("Search");
-        btnSignUp2.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnSignUp2.setkBorderRadius(30);
-        btnSignUp2.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnSignUp2.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnSignUp2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnSignUp2.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnSignUp2.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp2.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnSignUp2.setkStartColor(new java.awt.Color(255, 153, 153));
-        dashBoard.add(btnSignUp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, -1));
+        btnMenu1.setText("Menu");
+        btnMenu1.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnMenu1.setkBorderRadius(30);
+        btnMenu1.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnMenu1.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnMenu1.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMenu1.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnMenu1.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnMenu1.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnMenu1.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenu1ActionPerformed(evt);
+            }
+        });
+        dashBoard.add(btnMenu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 150, -1));
 
         mainScreen.setBackground(new java.awt.Color(255, 255, 255));
         mainScreen.setLayout(new java.awt.CardLayout());
@@ -284,56 +365,181 @@ public class Home extends javax.swing.JFrame {
         mainScreen.add(homeScreen, "card2");
 
         searchScreen.setBackground(new java.awt.Color(255, 255, 255));
+        searchScreen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Id", "Name", "Gender", "Age", "Position", "Salary", "Contact", "Date"
+                "Id", "Name", "Gender", "Age", "Position", "Salary", "Contact", "Image", "Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(table);
+
+        searchScreen.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 123, 770, 240));
 
         txtSearch.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        searchScreen.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(32, 53, 450, 40));
 
         btnSearch.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/search.png"))); // NOI18N
+        searchScreen.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(502, 53, 40, 40));
 
-        javax.swing.GroupLayout searchScreenLayout = new javax.swing.GroupLayout(searchScreen);
-        searchScreen.setLayout(searchScreenLayout);
-        searchScreenLayout.setHorizontalGroup(
-            searchScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(searchScreenLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(searchScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(searchScreenLayout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(68, Short.MAX_VALUE))
-        );
-        searchScreenLayout.setVerticalGroup(
-            searchScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchScreenLayout.createSequentialGroup()
-                .addContainerGap(53, Short.MAX_VALUE)
-                .addGroup(searchScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47))
-        );
+        txtUDAge.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDAge.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDAge.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, 190, 30));
+
+        txtUDImage.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDImage.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDImage.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 590, 0, 0));
+
+        jLabel5.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel5.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel5.setText("Name           :");
+        jLabel5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 100, 30));
+
+        jLabel14.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel14.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel14.setText("Gender        :");
+        jLabel14.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 100, 30));
+
+        btnGpGender.add(btnUDMale);
+        btnUDMale.setText("Male");
+        searchScreen.add(btnUDMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, 90, 30));
+
+        btnGpGender.add(btnUDFemale);
+        btnUDFemale.setText("Female");
+        searchScreen.add(btnUDFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 420, 100, 30));
+
+        jLabel9.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel9.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel9.setText("Age              :");
+        jLabel9.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 370, 100, 30));
+
+        jLabel15.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel15.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel15.setText("Position     :");
+        jLabel15.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 420, 100, 30));
+
+        txtUDPosition.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDPosition.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDPosition.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDPosition, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 420, 190, 30));
+
+        jLabel16.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel16.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel16.setText("Date            :");
+        jLabel16.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 470, 100, 30));
+
+        txtUDDate.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 190, 30));
+
+        txtUDSalary.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDSalary.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDSalary.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDSalary, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 470, 190, 30));
+
+        jLabel17.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel17.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel17.setText("Salary          :");
+        jLabel17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 100, 30));
+
+        jLabel18.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel18.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel18.setText("Contact      :");
+        jLabel18.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 520, 100, 30));
+
+        txtUDContact.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDContact.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDContact.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 520, 190, 30));
+
+        lbUDImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbUDImage.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(lbUDImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, 120, 130));
+
+        btnUDChooseImage.setBackground(new java.awt.Color(255, 204, 204));
+        btnUDChooseImage.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnUDChooseImage.setText("Brawe");
+        btnUDChooseImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUDChooseImageActionPerformed(evt);
+            }
+        });
+        searchScreen.add(btnUDChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 540, 120, -1));
+
+        btnMenu.setText("Delete");
+        btnMenu.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnMenu.setkBorderRadius(30);
+        btnMenu.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnMenu.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMenu.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
+        searchScreen.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 520, 120, 40));
+
+        btnMenu2.setText("Update");
+        btnMenu2.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnMenu2.setkBorderRadius(30);
+        btnMenu2.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnMenu2.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnMenu2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMenu2.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnMenu2.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnMenu2.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnMenu2.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenu2ActionPerformed(evt);
+            }
+        });
+        searchScreen.add(btnMenu2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 520, 120, 40));
+
+        jLabel6.setBackground(new java.awt.Color(100, 100, 100));
+        jLabel6.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        jLabel6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 440, 190, 10));
+
+        txtUDName.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDName.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDName, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 370, 190, 30));
+
+        txtUDId.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        txtUDId.setForeground(new java.awt.Color(51, 51, 51));
+        txtUDId.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(100, 100, 100)));
+        searchScreen.add(txtUDId, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 590, 0, 0));
 
         mainScreen.add(searchScreen, "card3");
 
@@ -372,14 +578,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseImageActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(this);
-        File file = chooser.getSelectedFile();
-        String fileName  = file.getAbsolutePath();
-        ImageIcon icon = new ImageIcon(fileName);
-        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
-        lbImage.setIcon(new ImageIcon(image));
-        txtImage.setText(fileName);
+        chooseImage(lbImage, txtImage);
     }//GEN-LAST:event_btnChooseImageActionPerformed
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
@@ -393,19 +592,10 @@ public class Home extends javax.swing.JFrame {
         SimpleDateFormat df = new SimpleDateFormat(txtDate.getDateFormatString());
         String date = df.format(txtDate.getDate());
         
-        System.out.println("name      : "+name);
-        System.out.println("gender    : "+gender);
-        System.out.println("age       : "+age1);
-        System.out.println("position  : "+position);
-        System.out.println("salary    : "+salary1);
-        System.out.println("contact   : "+contact);
-        System.out.println("image     : "+image);
-        System.out.println("date      : "+date);
-        
         if (!name.isEmpty() && !gender.isEmpty() && !age1.isEmpty() && !position.isEmpty() && !salary1.isEmpty() && !contact.isEmpty() && !image.isEmpty() && !date.isEmpty()) {
             int age = Integer.parseInt(age1);
             double salary = Double.parseDouble(salary1);
-            controller.addEmpToDB(new EmployeeModel(name,gender,age,position,salary,contact,image,date));
+            controller.addEmpToDB(new EmployeeModel(0,name,gender,age,position,salary,contact,image,date));
             viewEmployee();
             clear();
         } else {
@@ -413,6 +603,61 @@ public class Home extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnAddEmployeeActionPerformed
+
+    private void btnGotoSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGotoSearchActionPerformed
+        gotoScreen(searchScreen);
+        getData();
+    }//GEN-LAST:event_btnGotoSearchActionPerformed
+
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+        gotoScreen(homeScreen);
+    }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+        gotoScreen(menuScreen);
+    }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMenu1ActionPerformed
+
+    private void btnMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenu2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMenu2ActionPerformed
+
+    private void btnUDChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUDChooseImageActionPerformed
+        chooseImage(lbUDImage, txtUDImage);
+    }//GEN-LAST:event_btnUDChooseImageActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        int row = table.getSelectedRow();
+        txtUDId.setText(model.getValueAt(row, 0).toString());
+        txtUDName.setText(model.getValueAt(row, 1).toString());
+        if (model.getValueAt(row, 2).toString().equalsIgnoreCase("male")) {
+            btnUDMale.setSelected(true);
+        } else {
+            btnUDFemale.setSelected(true);
+        }
+        txtUDAge.setText(model.getValueAt(row, 3).toString());
+        txtUDPosition.setText(model.getValueAt(row, 4).toString());
+        txtUDSalary.setText(model.getValueAt(row, 5).toString());
+        txtUDContact.setText(model.getValueAt(row, 6).toString());
+        txtUDImage.setText(model.getValueAt(row, 7).toString());
+        ImageIcon icon = new ImageIcon(txtUDImage.getText());
+        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
+        lbUDImage.setIcon(new ImageIcon(image));
+        
+        try {
+            Date date;
+            SimpleDateFormat df = new SimpleDateFormat(txtUDDate.getDateFormatString());
+            date = df.parse(model.getValueAt(row, 8).toString());
+            txtUDDate.setDate(date);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_tableMouseClicked
 
     public static void main(String args[]) {
         new Themes.Theme("light");
@@ -423,16 +668,22 @@ public class Home extends javax.swing.JFrame {
         });
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddEmployee;
     private javax.swing.JButton btnChooseImage;
     private javax.swing.JRadioButton btnFemale;
+    private com.k33ptoo.components.KButton btnGotoSearch;
     private javax.swing.ButtonGroup btnGpGender;
+    private com.k33ptoo.components.KButton btnHome;
     private javax.swing.JRadioButton btnMale;
+    private com.k33ptoo.components.KButton btnMenu;
+    private com.k33ptoo.components.KButton btnMenu1;
+    private com.k33ptoo.components.KButton btnMenu2;
     private javax.swing.JButton btnSearch;
-    private com.k33ptoo.components.KButton btnSignUp;
-    private com.k33ptoo.components.KButton btnSignUp1;
-    private com.k33ptoo.components.KButton btnSignUp2;
+    private javax.swing.JButton btnUDChooseImage;
+    private javax.swing.JRadioButton btnUDFemale;
+    private javax.swing.JRadioButton btnUDMale;
     private javax.swing.JPanel dashBoard;
     private javax.swing.JPanel homeScreen;
     private javax.swing.JLabel jLabel1;
@@ -440,20 +691,29 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbImage;
+    private javax.swing.JLabel lbUDImage;
     private javax.swing.JPanel mainScreen;
     private javax.swing.JPanel menuScreen;
     private javax.swing.JLabel profile;
     private javax.swing.JPanel scrollPanel;
     private javax.swing.JPanel searchScreen;
+    private javax.swing.JTable table;
     private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtContact;
     private com.toedter.calendar.JDateChooser txtDate;
@@ -462,5 +722,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField txtPosition;
     private javax.swing.JTextField txtSalary;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtUDAge;
+    private javax.swing.JTextField txtUDContact;
+    private com.toedter.calendar.JDateChooser txtUDDate;
+    private javax.swing.JTextField txtUDId;
+    private javax.swing.JTextField txtUDImage;
+    private javax.swing.JTextField txtUDName;
+    private javax.swing.JTextField txtUDPosition;
+    private javax.swing.JTextField txtUDSalary;
     // End of variables declaration//GEN-END:variables
 }

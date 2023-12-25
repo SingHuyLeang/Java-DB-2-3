@@ -1,6 +1,7 @@
 package Home.Model;
 
 public class EmployeeModel {
+    private int id;
     private String name;
     private String gender;
     private int age;
@@ -9,8 +10,10 @@ public class EmployeeModel {
     private String contact;
     private String image;
     private String date;
+    
 
-    public EmployeeModel(String name, String gender, int age, String position, double salary, String contact, String image, String date) {
+    public EmployeeModel(int id,String name, String gender, int age, String position, double salary, String contact, String image, String date) {
+        this.id = id;
         this.name = name;
         this.gender = gender;
         this.age = age;
@@ -21,6 +24,10 @@ public class EmployeeModel {
         this.date = date;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public String getName() {
         return name;
     }

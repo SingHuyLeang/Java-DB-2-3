@@ -5,12 +5,15 @@ import Database.DBConnector;
 import Home.Model.EmployeeModel;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class EmployeeController extends DBConnector{
+public class EmployeeController extends DBConnector {
+
     PreparedStatement ps;
     ResultSet rs;
-    
-    public Collection<EmployeeModel> getData(){
+
+    public Collection<EmployeeModel> getData() {
         List<EmployeeModel> list = new ArrayList<>();
         try {
             String sql = "SELECT * FROM `tbl_employee`";
@@ -18,6 +21,7 @@ public class EmployeeController extends DBConnector{
             rs = ps.executeQuery();
             while (rs.next()) {
                 EmployeeModel emp = new EmployeeModel(
+                        rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("gender"),
                         rs.getInt("age"),
@@ -34,8 +38,8 @@ public class EmployeeController extends DBConnector{
         }
         return list;
     }
-    
-    public void addEmpToDB(EmployeeModel employee){
+
+    public void addEmpToDB(EmployeeModel employee) {
         try {
             String sql = "INSERT INTO `tbl_employee`(`name`, `gender`, `age`, `position`, `salary`, `contact`, `image`, `date`) VALUES (?,?,?,?,?,?,?,?)";
             ps = connector("db_employee").prepareStatement(sql);
@@ -47,15 +51,41 @@ public class EmployeeController extends DBConnector{
             ps.setString(6, employee.getContact());
             ps.setString(7, employee.getImage());
             ps.setString(8, employee.getDate());
-            
+
             int i = ps.executeUpdate();
-            if (i>0) {
+            if (i > 0) {
                 System.out.println("Add employee to db successfuly");
             } else {
                 AlertMessager.error("Employee can't be add");
             }
         } catch (SQLException e) {
-                e.printStackTrace();
+            e.printStackTrace();
+        }
+    }
+
+    public void updateEmpDB(EmployeeModel employee) {
+        try {
+            String sql = "UPDATE `tbl_employee` SET `name`=?,`gender`=?,`age`=?,`position`=?,`salary`=?,`contact`=?,`image`=?,`date`=? WHERE id = ?";
+            ps = connector("db_employee").prepareStatement(sql);
+            ps.setString(1, employee.getName());
+            ps.setString(2, employee.getGender());
+            ps.setInt(3, employee.getAge());
+            ps.setString(4, employee.getPosition());
+            ps.setDouble(5, employee.getSalary());
+            ps.setString(6, employee.getContact());
+            ps.setString(7, employee.getImage());
+            ps.setString(8, employee.getDate());
+            
+            ps.setInt(9, employee.getId());
+            
+            int i = ps.executeUpdate();
+            if (i>0) {
+                AlertMessager.success("Update Success");
+            }else{
+                AlertMessager.error("Update not Success");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }
