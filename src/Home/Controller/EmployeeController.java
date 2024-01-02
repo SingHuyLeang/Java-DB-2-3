@@ -5,8 +5,6 @@ import Database.DBConnector;
 import Home.Model.EmployeeModel;
 import java.sql.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class EmployeeController extends DBConnector {
 
@@ -88,4 +86,80 @@ public class EmployeeController extends DBConnector {
             ex.printStackTrace();
         }
     }
+    
+    public void deleteEmp(int id){
+        try {
+            String sql = "DELETE FROM `tbl_employee` WHERE `id`=?";
+            ps = connector("db_employee").prepareStatement(sql);
+            ps.setInt(1, id);
+            int i = ps.executeUpdate();
+            if (i>0) {
+                AlertMessager.success("Delete Success");
+            }else{
+                AlertMessager.error("Delete not Success");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+    }
+    
+    public int getTotalEmp(){
+        int count = 0;
+        try {
+            String sql = "SELECT `id` FROM `tbl_employee`";
+            ps = connector("db_employee").prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                count++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    public int getTotalMale(){
+        int count = 0;
+        try {
+            String sql = "SELECT `id` FROM `tbl_employee` WHERE `gender`=\"Male\"";
+            ps = connector("db_employee").prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                count++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    public int getTotalFemale(){
+        int count = 0;
+        try {
+            String sql = "SELECT `id` FROM `tbl_employee` WHERE `gender`=\"Female\"";
+            ps = connector("db_employee").prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                count++;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
+    public double getTotalSalary(){
+        double count = 0;
+        try {
+            String sql = "SELECT `salary` FROM `tbl_employee`";
+            ps = connector("db_employee").prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                count+=rs.getDouble(1);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
 }

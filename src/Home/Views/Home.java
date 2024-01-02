@@ -8,9 +8,11 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -18,31 +20,52 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.ExporterInput;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.view.JasperViewer;
+
 public class Home extends javax.swing.JFrame {
-    
+
     EmployeeController controller = new EmployeeController();
-    
+
+    String name1;
+    String gender1;
+    String age1;
+    String position1;
+    String salary1;
+    String contact1;
+    String image1;
+    String date1;
+
     public Home() {
         initComponents();
         viewEmployee();
     }
-    
-    public void viewEmployee(){
+
+    public void viewEmployee() {
         scrollPanel.removeAll();
-        scrollPanel.setLayout(new GridLayout(controller.getData().size()/5, 5));
+        scrollPanel.setLayout(new GridLayout(controller.getData().size() / 5, 5));
         controller.getData().forEach((emp) -> {
             panelItems items = new panelItems(emp);
             scrollPanel.add(items);
             scrollPanel.repaint();
             scrollPanel.revalidate();
-     
-        });        
+
+        });
     }
-    
-    public void getData(){
-        DefaultTableModel model =(DefaultTableModel) table.getModel();
+
+    public void getData() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
-        controller.getData().forEach((emp)->{
+        controller.getData().forEach((emp) -> {
             Object[] row = {
                 emp.getId(),
                 emp.getName(),
@@ -52,13 +75,12 @@ public class Home extends javax.swing.JFrame {
                 emp.getSalary(),
                 emp.getContact(),
                 emp.getImage(),
-                emp.getDate(),
-            };
+                emp.getDate(),};
             model.addRow(row);
         });
     }
-    
-    public void clear(){
+
+    public void clear() {
         txtName.setText("");
         btnMale.setSelected(false);
         btnFemale.setSelected(false);
@@ -70,21 +92,21 @@ public class Home extends javax.swing.JFrame {
         btnGpGender.clearSelection();
         lbImage.setIcon(null);
     }
-    
-    void gotoScreen(Component component){
+
+    void gotoScreen(Component component) {
         mainScreen.removeAll();
         mainScreen.add(component);
         mainScreen.repaint();
         mainScreen.revalidate();
     }
-    
-    public void chooseImage(JLabel label,JTextField textField){
+
+    public void chooseImage(JLabel label, JTextField textField) {
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(this);
         File file = chooser.getSelectedFile();
-        String fileName  = file.getAbsolutePath();
+        String fileName = file.getAbsolutePath();
         ImageIcon icon = new ImageIcon(fileName);
-        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
+        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(), Image.SCALE_SMOOTH);
         label.setIcon(new ImageIcon(image));
         textField.setText(fileName);
     }
@@ -99,7 +121,7 @@ public class Home extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnHome = new com.k33ptoo.components.KButton();
         btnGotoSearch = new com.k33ptoo.components.KButton();
-        btnMenu1 = new com.k33ptoo.components.KButton();
+        btnMenu = new com.k33ptoo.components.KButton();
         mainScreen = new javax.swing.JPanel();
         homeScreen = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -147,12 +169,13 @@ public class Home extends javax.swing.JFrame {
         txtUDContact = new javax.swing.JTextField();
         lbUDImage = new javax.swing.JLabel();
         btnUDChooseImage = new javax.swing.JButton();
-        btnMenu = new com.k33ptoo.components.KButton();
-        btnMenu2 = new com.k33ptoo.components.KButton();
+        btnDelete = new com.k33ptoo.components.KButton();
+        btnUpdate = new com.k33ptoo.components.KButton();
         jLabel6 = new javax.swing.JLabel();
         txtUDName = new javax.swing.JTextField();
         txtUDId = new javax.swing.JTextField();
         menuScreen = new javax.swing.JPanel();
+        btnPrintRP = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1000, 600));
@@ -203,22 +226,22 @@ public class Home extends javax.swing.JFrame {
         });
         dashBoard.add(btnGotoSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 150, -1));
 
-        btnMenu1.setText("Menu");
-        btnMenu1.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnMenu1.setkBorderRadius(30);
-        btnMenu1.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnMenu1.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnMenu1.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMenu1.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnMenu1.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnMenu1.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnMenu1.setkStartColor(new java.awt.Color(255, 153, 153));
-        btnMenu1.addActionListener(new java.awt.event.ActionListener() {
+        btnMenu.setText("Menu");
+        btnMenu.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnMenu.setkBorderRadius(30);
+        btnMenu.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnMenu.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnMenu.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnMenu.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenu1ActionPerformed(evt);
+                btnMenuActionPerformed(evt);
             }
         });
-        dashBoard.add(btnMenu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 150, -1));
+        dashBoard.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 150, -1));
 
         mainScreen.setBackground(new java.awt.Color(255, 255, 255));
         mainScreen.setLayout(new java.awt.CardLayout());
@@ -492,39 +515,39 @@ public class Home extends javax.swing.JFrame {
         });
         searchScreen.add(btnUDChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 540, 120, -1));
 
-        btnMenu.setText("Delete");
-        btnMenu.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnMenu.setkBorderRadius(30);
-        btnMenu.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnMenu.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnMenu.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMenu.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnMenu.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnMenu.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnMenu.setkStartColor(new java.awt.Color(255, 153, 153));
-        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setText("Delete");
+        btnDelete.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnDelete.setkBorderRadius(30);
+        btnDelete.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnDelete.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnDelete.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnDelete.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnDelete.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnDelete.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnDelete.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenuActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
-        searchScreen.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 520, 120, 40));
+        searchScreen.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 520, 120, 40));
 
-        btnMenu2.setText("Update");
-        btnMenu2.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
-        btnMenu2.setkBorderRadius(30);
-        btnMenu2.setkEndColor(new java.awt.Color(255, 51, 51));
-        btnMenu2.setkHoverEndColor(new java.awt.Color(255, 153, 153));
-        btnMenu2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        btnMenu2.setkHoverStartColor(new java.awt.Color(255, 51, 51));
-        btnMenu2.setkPressedColor(new java.awt.Color(255, 51, 51));
-        btnMenu2.setkSelectedColor(new java.awt.Color(255, 51, 51));
-        btnMenu2.setkStartColor(new java.awt.Color(255, 153, 153));
-        btnMenu2.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setText("Update");
+        btnUpdate.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
+        btnUpdate.setkBorderRadius(30);
+        btnUpdate.setkEndColor(new java.awt.Color(255, 51, 51));
+        btnUpdate.setkHoverEndColor(new java.awt.Color(255, 153, 153));
+        btnUpdate.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnUpdate.setkHoverStartColor(new java.awt.Color(255, 51, 51));
+        btnUpdate.setkPressedColor(new java.awt.Color(255, 51, 51));
+        btnUpdate.setkSelectedColor(new java.awt.Color(255, 51, 51));
+        btnUpdate.setkStartColor(new java.awt.Color(255, 153, 153));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMenu2ActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
-        searchScreen.add(btnMenu2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 520, 120, 40));
+        searchScreen.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 520, 120, 40));
 
         jLabel6.setBackground(new java.awt.Color(100, 100, 100));
         jLabel6.setFont(new java.awt.Font("Barlow", 0, 18)); // NOI18N
@@ -545,15 +568,28 @@ public class Home extends javax.swing.JFrame {
 
         menuScreen.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnPrintRP.setText("kButton1");
+        btnPrintRP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintRPActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuScreenLayout = new javax.swing.GroupLayout(menuScreen);
         menuScreen.setLayout(menuScreenLayout);
         menuScreenLayout.setHorizontalGroup(
             menuScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 830, Short.MAX_VALUE)
+            .addGroup(menuScreenLayout.createSequentialGroup()
+                .addGap(304, 304, 304)
+                .addComponent(btnPrintRP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(341, Short.MAX_VALUE))
         );
         menuScreenLayout.setVerticalGroup(
             menuScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(menuScreenLayout.createSequentialGroup()
+                .addGap(269, 269, 269)
+                .addComponent(btnPrintRP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(276, Short.MAX_VALUE))
         );
 
         mainScreen.add(menuScreen, "card4");
@@ -583,25 +619,25 @@ public class Home extends javax.swing.JFrame {
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
         String name = txtName.getText();
-        String gender = btnMale.isSelected()?"Male":btnFemale.isSelected()?"Female":"Other";
+        String gender = btnMale.isSelected() ? "Male" : btnFemale.isSelected() ? "Female" : "Other";
         String age1 = txtAge.getText();
         String position = txtPosition.getText();
         String salary1 = txtSalary.getText();
         String contact = txtContact.getText();
-        String image   = txtImage.getText();
+        String image = txtImage.getText();
         SimpleDateFormat df = new SimpleDateFormat(txtDate.getDateFormatString());
         String date = df.format(txtDate.getDate());
-        
+
         if (!name.isEmpty() && !gender.isEmpty() && !age1.isEmpty() && !position.isEmpty() && !salary1.isEmpty() && !contact.isEmpty() && !image.isEmpty() && !date.isEmpty()) {
             int age = Integer.parseInt(age1);
             double salary = Double.parseDouble(salary1);
-            controller.addEmpToDB(new EmployeeModel(0,name,gender,age,position,salary,contact,image,date));
+            controller.addEmpToDB(new EmployeeModel(0, name, gender, age, position, salary, contact, image, date));
             viewEmployee();
             clear();
         } else {
             AlertMessager.warning("Please enter all field");
         }
-        
+
     }//GEN-LAST:event_btnAddEmployeeActionPerformed
 
     private void btnGotoSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGotoSearchActionPerformed
@@ -611,19 +647,56 @@ public class Home extends javax.swing.JFrame {
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
         gotoScreen(homeScreen);
+        viewEmployee();
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String id1 = txtUDId.getText();
+        if (!id1.isEmpty()) {
+            int id = Integer.parseInt(id1);
+            controller.deleteEmp(id);
+            getData();
+        }else{
+            AlertMessager.error("Please select data for delete");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         gotoScreen(menuScreen);
     }//GEN-LAST:event_btnMenuActionPerformed
 
-    private void btnMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenu1ActionPerformed
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String id   = txtUDId.getText();
+        String name = txtUDName.getText();
+        String gender = btnUDMale.isSelected() ? "Male" : btnUDFemale.isSelected() ? "Female" : "Other";
+        String age = txtUDAge.getText();
+        String position = txtUDPosition.getText();
+        String salary = txtUDSalary.getText();
+        String contact = txtUDContact.getText();
+        String image = txtUDImage.getText();
 
-    private void btnMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenu2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMenu2ActionPerformed
+        SimpleDateFormat df = new SimpleDateFormat(txtUDDate.getDateFormatString());
+        String date = null;
+        if (txtUDDate.getDate() != null) {
+            date = df.format(txtUDDate.getDate());
+        } else {
+            date = df.format(txtUDDate.getDate());
+        }
+        if (!name.isEmpty() && !gender.isEmpty() && !age.isEmpty() && !position.isEmpty() && !salary.isEmpty() && !contact.isEmpty() && !image.isEmpty() && !date.isEmpty()) {
+            if (!name.equals(name1) || !gender.equalsIgnoreCase(gender1) || !age.equals(age1) || !position.equals(position1) || !salary.equals(salary1) || !contact.equals(contact1) || !image.equals(image1) || !date.equals(date1)) {
+                // update data
+                int id1 = Integer.parseInt(id);
+                int age2 = Integer.parseInt(age);
+                double salary2 = Double.parseDouble(salary);
+                controller.updateEmpDB(new EmployeeModel(id1, name, gender, age2, position, salary2, contact, image, date));
+                getData();
+            } else {
+                AlertMessager.error("Please update informationn");
+            }
+        } else {
+            AlertMessager.error("Please select data for update");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnUDChooseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUDChooseImageActionPerformed
         chooseImage(lbUDImage, txtUDImage);
@@ -645,9 +718,9 @@ public class Home extends javax.swing.JFrame {
         txtUDContact.setText(model.getValueAt(row, 6).toString());
         txtUDImage.setText(model.getValueAt(row, 7).toString());
         ImageIcon icon = new ImageIcon(txtUDImage.getText());
-        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(),Image.SCALE_SMOOTH);
+        Image image = icon.getImage().getScaledInstance(lbImage.getWidth(), lbImage.getHeight(), Image.SCALE_SMOOTH);
         lbUDImage.setIcon(new ImageIcon(image));
-        
+
         try {
             Date date;
             SimpleDateFormat df = new SimpleDateFormat(txtUDDate.getDateFormatString());
@@ -657,7 +730,48 @@ public class Home extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         
+        name1 = model.getValueAt(row, 1).toString();
+        if (model.getValueAt(row, 2).toString().equalsIgnoreCase("male")) {
+            gender1 = "male";
+        } else {
+            gender1 = "female";
+        }
+        age1 = model.getValueAt(row, 3).toString();
+        position1 = model.getValueAt(row, 4).toString();
+        salary1 = model.getValueAt(row, 5).toString();
+        contact1 = model.getValueAt(row, 6).toString();
+        image1 = model.getValueAt(row, 7).toString();
+        
+        SimpleDateFormat df = new SimpleDateFormat(txtUDDate.getDateFormatString());
+        date1 = df.format(txtUDDate.getDate());;        
     }//GEN-LAST:event_tableMouseClicked
+
+    private void btnPrintRPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintRPActionPerformed
+        int totalemp = controller.getTotalEmp();
+        int totalmale = controller.getTotalMale();
+        int totalfemale = controller.getTotalFemale();
+        double totalsalary = controller.getTotalSalary();
+        System.out.println(
+                "total emp = "+totalemp
+                + "\ntotal male = "+totalmale
+                + "\ntotal female = "+totalfemale
+                + "\ntotal salary = "+totalsalary
+        );
+        HashMap<String,Object> data = new HashMap<>();
+        data.put("totalemp", totalemp);
+        data.put("totalmale", totalmale);
+        data.put("totalfemale", totalfemale);
+        data.put("totalsalary", totalsalary);
+        
+        try {
+            JasperReport report = JasperCompileManager.compileReport("src/Home/Views/myreport.jrxml");
+            JRBeanCollectionDataSource source = new JRBeanCollectionDataSource(controller.getData());
+            JasperPrint print = JasperFillManager.fillReport(report, data, source);
+            JasperViewer.viewReport(print);
+        } catch (JRException ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnPrintRPActionPerformed
 
     public static void main(String args[]) {
         new Themes.Theme("light");
@@ -668,22 +782,23 @@ public class Home extends javax.swing.JFrame {
         });
     }
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddEmployee;
     private javax.swing.JButton btnChooseImage;
+    private com.k33ptoo.components.KButton btnDelete;
     private javax.swing.JRadioButton btnFemale;
     private com.k33ptoo.components.KButton btnGotoSearch;
     private javax.swing.ButtonGroup btnGpGender;
     private com.k33ptoo.components.KButton btnHome;
     private javax.swing.JRadioButton btnMale;
     private com.k33ptoo.components.KButton btnMenu;
-    private com.k33ptoo.components.KButton btnMenu1;
-    private com.k33ptoo.components.KButton btnMenu2;
+    private com.k33ptoo.components.KButton btnPrintRP;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUDChooseImage;
     private javax.swing.JRadioButton btnUDFemale;
     private javax.swing.JRadioButton btnUDMale;
+    private com.k33ptoo.components.KButton btnUpdate;
     private javax.swing.JPanel dashBoard;
     private javax.swing.JPanel homeScreen;
     private javax.swing.JLabel jLabel1;
